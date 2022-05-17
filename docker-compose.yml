@@ -1,0 +1,9 @@
+version: '3'
+services:
+  spark-master:
+    build: 
+      context: D:\Projects\learnings\Docker\Apache Spark\
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+      - '4040:4040'
