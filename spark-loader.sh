@@ -13,6 +13,4 @@ echo ">>>>>> Starting the SSH server..."
 echo ">>>>>> Starting the Apache Spark..."
 ./spark-3.1.2-bin-hadoop2.7/sbin/start-all.sh
 
-jps
-
 tail -f /dev/null

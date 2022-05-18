@@ -8,10 +8,12 @@ RUN apt install -y wget
 
 # Make Dir
 RUN mkdir /home/bigdata/
+ADD spark-loader.sh /home/bigdata/
+RUN chmod +x /home/bigdata/spark-loader.sh
 
-# Download OpenJDK Java 
+# Download OpenJDK Java 1.8
 RUN wget https://builds.openlogic.com/downloadJDK/openlogic-openjdk/8u262-b10/openlogic-openjdk-8u262-b10-linux-x64.tar.gz
-# Download the Spark file
+# Download the Spark Framework
 RUN wget https://dlcdn.apache.org/spark/spark-3.1.2/spark-3.1.2-bin-hadoop2.7.tgz
 
 RUN tar -xvf openlogic-openjdk-8u262-b10-linux-x64.tar.gz
@@ -22,15 +24,12 @@ RUN cp -r openlogic-openjdk-8u262-b10-linux-64/ spark-3.1.2-bin-hadoop2.7/ /home
 
 WORKDIR /home/bigdata/
 
-RUN export JAVA_HOME=/home/bigdata/openlogic-openjdk-8u262-b10-linux-64
-RUN export PATH=$PATH:$JAVA_HOME/bin
+RUN cp spark-3.1.2-bin-hadoop2.7/conf/spark-env.sh.template spark-3.1.2-bin-hadoop2.7/conf/spark-env.sh
+RUN echo "export JAVA_HOME=/home/bigdata/openlogic-openjdk-8u262-b10-linux-64" >> spark-3.1.2-bin-hadoop2.7/conf/spark-env.sh
 
 # Install and Set the sss-server and ssh-client
 RUN apt-get install -y openssh-server openssh-client
-RUN /etc/init.d/ssh start
 RUN ssh-keygen -t rsa -P "" -f /root/.ssh/id_rsa
 RUN cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 
-# CMD spark-3.1.2-bin-hadoop2.7/sbin/start-all.sh
-
-ENTRYPOINT ["tail", "-f", "/dev/null"]
+ENTRYPOINT ["./spark-loader.sh"]
