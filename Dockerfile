@@ -7,6 +7,7 @@ FROM ubuntu
 # Update and Upgrade the ubuntu OS
 RUN apt-get -y update && apt-get -y upgrade
 RUN apt install -y wget
+RUN apt install -y iputils-ping
 
 # Make Dir
 RUN mkdir /home/bigdata/
