@@ -1,7 +1,7 @@
 # Apache Spark in Docker
 
-> ***docker tag apache-spark:1.1.0 hackprotech/apache-spark:1.1.0***
-> ***docker push hackprotech/apache-spark:1.1.0***
+> ***docker tag hackprotech/apache-spark:1.2.0 hackprotech/apache-spark:1.2.0***
+> ***docker push hackprotech/apache-spark:1.2.0***
 
 
 spark-3.1.2-bin-hadoop2.7/bin/spark-submit \
