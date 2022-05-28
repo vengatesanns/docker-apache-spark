@@ -1,0 +1,14 @@
+version: '3'
+services:
+  # Master Node
+  master-node:
+    image: hackprotech/apache-hadoop:1.0.0
+    container_name: 'master-node'
+    hostname: spark-master
+    environment:
+      - SPARK_NODE=MASTER
+    ports:
+      - '8080:8080'
+      - '4040:4040'
+      - '7077:7077'
+      - '9000:9000'
