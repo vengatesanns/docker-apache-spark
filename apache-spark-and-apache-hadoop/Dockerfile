@@ -7,51 +7,29 @@ RUN wget https://archive.apache.org/dist/hadoop/common/hadoop-2.7.7/hadoop-2.7.7
 RUN tar -xvf hadoop-2.7.7.tar.gz
 RUN rm hadoop-2.7.7.tar.gz
 
-# RUN cp -r hadoop-2.7.7/ /home/bigdata/
 ADD hadoop-loader.sh /home/bigdata/
+ADD hadoop-configs /home/bigdata/
 RUN mkdir -p /home/bigdata/HDFS/namenode
+RUN mkdir -p /home/bigdata/HDFS/datanode
 
 WORKDIR /home/bigdata/
 
+# Replace the Configuration Tag
+RUN sed -i "/<configuration>/,/<\/configuration>/d " core-site.xml hdfs-site.xml mapred-site.xml yarn-site.xml
+
 # 1. core-site.xml
-RUN echo "<configuration> \
-            <property> \
-                <name>fs.defaultFS</name> \
-                <value>hdfs://spark-master:9000</value> \
-            </property> \
-        </configuration>" >> hadoop-2.7.7/etc/hadoop/core-site.xml
+RUN cat hadoop-configs/core-site.txt >> hadoop-2.7.7/etc/hadoop/core-site.xml
 
 # 2. hdfs-site.xml
-RUN echo "<configuration> \
-            <property> \
-                <name>dfs.replication</name> \
-                <value>1</value> \
-            </property> \
-            <property> \
-                <name>dfs.namenode.name.dir</name> \
-                <value>/home/bigdata/HDFS/namenode</value> \
-            </property> \
-        </configuration>" >> hadoop-2.7.7/etc/hadoop/hdfs-site.xml
+RUN cat hadoop-configs/hdfs-site.txt >> hadoop-2.7.7/etc/hadoop/hdfs-site.xml
 
 # 3. mapred-site.xml
-RUN echo "<configuration> \
-            <property> \
-                <name>mapreduce.framework.name</name> \
-                <value>yarn</value> \
-            </property> \
-          </configuration>" >> hadoop-2.7.7/etc/hadoop/mapred-site.xml
+RUN cat hadoop-configs/mapred-site.txt >> hadoop-2.7.7/etc/hadoop/mapred-site.xml
 
 # 4. yarn-site.xml
-RUN echo "<configuration> \
-            <property> \
-                <name>yarn.nodemanager.aux-services</name> \
-                <value>mapreduce_shuffle</value> \
-            </property> \
-            <property> \
-                <name>yarn.nodemanager.auxservices.mapreduce.shuffle.class</name> \
-                <value>org.apache.hadoop.mapred.ShuffleHandler</value> \
-            </property> \
-        </configuration>" >> hadoop-2.7.7/etc/hadoop/yarn-site.xml
+RUN cat hadoop-configs/yarn-site.txt >> hadoop-2.7.7/etc/hadoop/yarn-site.xml
+
+RUN echo "export JAVA_HOME=/home/bigdata/openlogic-openjdk-8u262-b10-linux-64" >> hadoop-2.7.7/etc/hadoop/hadoop-env.sh
 
 
 ENTRYPOINT [ "./hadoop-loader.sh" ]

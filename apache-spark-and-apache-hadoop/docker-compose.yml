@@ -2,7 +2,7 @@ version: '3'
 services:
   # Master Node
   master-node:
-    image: hackprotech/apache-hadoop:1.0.0
+    image: hackprotech/apache-hadoop-and-apache-spark:1.0.0
     container_name: 'master-node'
     hostname: spark-master
     environment:
@@ -12,3 +12,12 @@ services:
       - '4040:4040'
       - '7077:7077'
       - '9000:9000'
+      - '50075:50075'
+      - '9870:9870'
+      - '9866:9866'
+      - '50020:50020'
+      - '50070:50070'
+      - '50470:50470'
+      - '50475:50475'
+      - '50010:50010'
+      - '50090:50090'
