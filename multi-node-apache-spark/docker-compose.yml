@@ -1,0 +1,36 @@
+version: '3'
+services:
+  # Master Node
+  spark-master:
+    image: hackprotech/apache-spark:2.0.0
+    container_name: 'master-node'
+    hostname: spark-master
+    environment:
+      - SPARK_NODE=MASTER
+    ports:
+      - '8080:8080'
+      - '4040:4040'
+      - '7077:7077'
+  # Worker Node 1 
+  spark-worker-1:
+    image: hackprotech/apache-spark:2.0.0
+    container_name: 'worker-node-1'
+    hostname: spark-worker1
+    environment:
+      - SPARK_NODE=WORKER
+      - SPARK_MASTER_URL=spark://spark-master:7077
+    depends_on:
+      - spark-master
+  # Worker Node 2 
+  spark-worker-2:
+    image: hackprotech/apache-spark:2.0.0
+    container_name: 'worker-node-2'
+    hostname: spark-worker2
+    environment:
+      - SPARK_NODE=WORKER
+      - SPARK_MASTER_URL=spark://spark-master:7077
+    depends_on:
+      - spark-master
+networks:
+  spark-network:
+    driver: bridge

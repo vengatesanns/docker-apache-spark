@@ -1,7 +1,14 @@
 
-#  Ubuntu OS + Apache Spark
-FROM hackprotech/apache-spark:2.0.0
+#  Ubuntu OS
+FROM ubuntu
 
+# Update and Upgrade the ubuntu OS
+RUN apt-get -y update && apt-get -y upgrade
+RUN apt install -y wget
+RUN apt install -y iputils-ping
+
+# Make Dir
+RUN mkdir /home/bigdata/
 WORKDIR /home/bigdata/
 
 #  Download and Extract the Apache Hadoop
@@ -9,10 +16,10 @@ RUN wget https://archive.apache.org/dist/hadoop/common/hadoop-2.7.7/hadoop-2.7.7
 RUN tar -xvf hadoop-2.7.7.tar.gz
 RUN rm hadoop-2.7.7.tar.gz
 
-
 ADD hadoop-loader.sh /home/bigdata/
 ADD hadoop_configs /home/bigdata/
 RUN chmod +x /home/bigdata/hadoop-loader.sh
+
 RUN mkdir -p /home/bigdata/HDFS/namenode
 RUN mkdir -p /home/bigdata/HDFS/datanode
 
@@ -26,20 +33,17 @@ RUN sed -i "/<configuration>/,/<\/configuration>/d " \
     hadoop-2.7.7/etc/hadoop/yarn-site.xml
 
 # 1. core-site.xml
-RUN cat core-site.txt >> hadoop-2.7.7/etc/hadoop/core-site.xml
+RUN cat hadoop_configs/core-site.txt >> hadoop-2.7.7/etc/hadoop/core-site.xml
 
 # 2. hdfs-site.xml
-RUN cat hdfs-site.txt >> hadoop-2.7.7/etc/hadoop/hdfs-site.xml
+RUN cat hadoop_configs/hdfs-site.txt >> hadoop-2.7.7/etc/hadoop/hdfs-site.xml
 
 # 3. mapred-site.xml
-RUN cat mapred-site.txt >> hadoop-2.7.7/etc/hadoop/mapred-site.xml
+RUN cat hadoop_configs/mapred-site.txt >> hadoop-2.7.7/etc/hadoop/mapred-site.xml
 
 # 4. yarn-site.xml
-RUN cat yarn-site.txt >> hadoop-2.7.7/etc/hadoop/yarn-site.xml
-
-RUN rm -r core-site.txt hdfs-site.txt mapred-site.txt yarn-site.txt
+RUN cat hadoop_configs/yarn-site.txt >> hadoop-2.7.7/etc/hadoop/yarn-site.xml
 
 RUN echo "export JAVA_HOME=/home/bigdata/openlogic-openjdk-8u262-b10-linux-64" >> hadoop-2.7.7/etc/hadoop/hadoop-env.sh
-
 
 ENTRYPOINT [ "./hadoop-loader.sh" ]
