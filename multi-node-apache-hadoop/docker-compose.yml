@@ -2,19 +2,57 @@ version: '3'
 services:
   # Master Node
   master-node:
-    image: hackprotech/multinode-apache-hadoop:2.0.0
+    image: hackprotech/multinode-apache-hadoop:1.0.0
     container_name: 'master-node'
     hostname: master-node
     environment:
       - NODE_TYPE=MASTER
     ports:
       - '9000:9000'
-      - '7001:50075'
+      - '60075:50075'
       - '9870:9870'
       - '9866:9866'
-      - '7002:50020'
-      - '7003:50070'
-      - '7004:50470'
-      - '7005:50475'
-      - '7006:50010'
-      - '7007:50090'
+      - '60020:50020'
+      - '60070:50070'
+      - '60470:50470'
+      - '60475:50475'
+      - '60010:50010'
+      - '60090:50090'
+  slave-node-1:
+    image: hackprotech/multinode-apache-hadoop:1.0.0
+    container_name: 'slave-node-1'
+    hostname:   slave-node-1
+    environment:
+      - NODE_TYPE=SLAVE1
+    ports:
+      - '9000:9000'
+      - '60075:50075'
+      - '9870:9870'
+      - '9866:9866'
+      - '60020:50020'
+      - '60070:50070'
+      - '60470:50470'
+      - '60475:50475'
+      - '60010:50010'
+      - '60090:50090'
+    depends_on:
+      - master-node
+  slave-node-2:
+    image: hackprotech/multinode-apache-hadoop:1.0.0
+    container_name: 'slave-node-2'
+    hostname:   slave-node-2
+    environment:
+      - NODE_TYPE=SLAVE2
+    ports:
+      - '9000:9000'
+      - '60075:50075'
+      - '9870:9870'
+      - '9866:9866'
+      - '60020:50020'
+      - '60070:50070'
+      - '60470:50470'
+      - '60475:50475'
+      - '60010:50010'
+      - '60090:50090'
+    depends_on:
+      - master-node
