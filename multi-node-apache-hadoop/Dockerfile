@@ -30,6 +30,8 @@ RUN cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 
 ADD hadoop-loader.sh ./
 COPY hadoop_configs ./
+COPY hadoop_configs/master ./
+COPY hadoop_configs/slave ./
 RUN chmod +x /home/bigdata/hadoop-loader.sh
 
 RUN mkdir -p /home/bigdata/HDFS/namenode
@@ -40,7 +42,7 @@ RUN cp hadoop-2.7.7/etc/hadoop/mapred-site.xml.template hadoop-2.7.7/etc/hadoop/
 # Replace the Configuration Tag
 RUN sed -i "/<configuration>/,/<\/configuration>/d " \
     hadoop-2.7.7/etc/hadoop/core-site.xml \
-    hadoop-2.7.7/etc/hadoop/hdfs-site.xml \
+    # hadoop-2.7.7/etc/hadoop/hdfs-site.xml \
     hadoop-2.7.7/etc/hadoop/mapred-site.xml \
     hadoop-2.7.7/etc/hadoop/yarn-site.xml
 

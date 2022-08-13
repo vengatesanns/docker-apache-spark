@@ -15,17 +15,27 @@ echo ">>>>>> Starting the SSH server..."
 # Start the Master and Worker based on the env params condition
 echo ">>>>>> Starting the Apache Hadoop..."
 echo " StrictHostKeyChecking no" >> ~/.ssh/config
+
+
+# Delete the configuration tag in xml
+sed -i "/<configuration>/,/<\/configuration>/d " hadoop-2.7.7/etc/hadoop/hdfs-site.xml
+
 if [ $NODE_TYPE == "MASTER" ]
 then
     echo "slave-node-1" >> hadoop-2.7.7/etc/hadoop/slaves
     echo "slave-node-2" >> hadoop-2.7.7/etc/hadoop/slaves
+    cat /home/bigdata/hdfs-site-master.txt >> hadoop-2.7.7/etc/hadoop/hdfs-site.xml
+
     hadoop-2.7.7/bin/hdfs namenode -format
 elif  [ $NODE_TYPE == "SLAVE1" ]
-then
-        echo "slave-node-1" >> hadoop-2.7.7/etc/hadoop/slaves
+then    
+    # mkdir -p /home/bigdata/HDFS/datanode
+    cat /home/bigdata/hdfs-site-slave.txt >> hadoop-2.7.7/etc/hadoop/hdfs-site.xml
 elif  [ $NODE_TYPE == "SLAVE2" ]
 then
-        echo "slave-node-2" >> hadoop-2.7.7/etc/hadoop/slaves
+    # mkdir -p /home/bigdata/HDFS/datanode
+    # echo "slave-node-2" >> hadoop-2.7.7/etc/hadoop/slaves
+    cat /home/bigdata/hdfs-site-slave.txt >> hadoop-2.7.7/etc/hadoop/hdfs-site.xml
 else
     echo "Invalid NODE_TYPE - $NODE_TYPE"
 fi
