@@ -6,5 +6,5 @@
     <property> 
         <name>dfs.namenode.name.dir</name> 
         <value>/home/bigdata/HDFS/namenode</value> 
-    </property> 
+    </property>
 </configuration>

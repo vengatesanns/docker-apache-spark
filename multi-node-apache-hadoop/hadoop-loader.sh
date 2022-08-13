@@ -22,6 +22,8 @@ sed -i "/<configuration>/,/<\/configuration>/d " hadoop-2.7.7/etc/hadoop/hdfs-si
 
 if [ $NODE_TYPE == "MASTER" ]
 then
+    rm hadoop-2.7.7/etc/hadoop/slaves
+    touch slaves
     echo "slave-node-1" >> hadoop-2.7.7/etc/hadoop/slaves
     echo "slave-node-2" >> hadoop-2.7.7/etc/hadoop/slaves
     cat /home/bigdata/hdfs-site-master.txt >> hadoop-2.7.7/etc/hadoop/hdfs-site.xml
