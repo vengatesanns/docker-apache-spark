@@ -3,12 +3,12 @@ services:
   # Master Node
   spark-master:
     image: hackprotech/apache-spark:2.0.0
-    container_name: 'master-node'
+    container_name: 'spark-master'
     hostname: spark-master
     environment:
       - NODE_TYPE=MASTER
     ports:
-      - '8081:8080'
+      - '8080:8080'
       - '4040:4040'
       - '7077:7077'
   # Worker Node 1 
