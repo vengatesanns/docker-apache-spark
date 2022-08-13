@@ -6,9 +6,9 @@ services:
     container_name: 'master-node'
     hostname: spark-master
     environment:
-      - SPARK_NODE=MASTER
+      - NODE_TYPE=MASTER
     ports:
-      - '8080:8080'
+      - '8081:8080'
       - '4040:4040'
       - '7077:7077'
   # Worker Node 1 
@@ -17,7 +17,7 @@ services:
     container_name: 'worker-node-1'
     hostname: spark-worker1
     environment:
-      - SPARK_NODE=WORKER
+      - NODE_TYPE=WORKER
       - SPARK_MASTER_URL=spark://spark-master:7077
     depends_on:
       - spark-master
@@ -27,7 +27,7 @@ services:
     container_name: 'worker-node-2'
     hostname: spark-worker2
     environment:
-      - SPARK_NODE=WORKER
+      - NODE_TYPE=WORKER
       - SPARK_MASTER_URL=spark://spark-master:7077
     depends_on:
       - spark-master
