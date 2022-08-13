@@ -1,20 +1,16 @@
+#  Multinode Spark and Hadoop
+FROM hackprotech/spark-multinode-cluster:latest
 
-#  Ubuntu OS + Apache Spark
-FROM hackprotech/apache-spark:2.0.0
-
-WORKDIR /home/bigdata/
+ADD spark-hadoop-loader.sh /home/bigdata/
+ADD hadoop_configs /home/bigdata/
+RUN chmod +x /home/bigdata/spark-hadoop-loader.sh
+RUN mkdir -p /home/bigdata/HDFS/namenode
+RUN mkdir -p /home/bigdata/HDFS/datanode
 
 #  Download and Extract the Apache Hadoop
 RUN wget https://archive.apache.org/dist/hadoop/common/hadoop-2.7.7/hadoop-2.7.7.tar.gz
 RUN tar -xvf hadoop-2.7.7.tar.gz
 RUN rm hadoop-2.7.7.tar.gz
-
-
-ADD hadoop-loader.sh /home/bigdata/
-ADD hadoop_configs /home/bigdata/
-RUN chmod +x /home/bigdata/hadoop-loader.sh
-RUN mkdir -p /home/bigdata/HDFS/namenode
-RUN mkdir -p /home/bigdata/HDFS/datanode
 
 RUN cp hadoop-2.7.7/etc/hadoop/mapred-site.xml.template hadoop-2.7.7/etc/hadoop/mapred-site.xml 
 
@@ -42,4 +38,4 @@ RUN rm -r core-site.txt hdfs-site.txt mapred-site.txt yarn-site.txt
 RUN echo "export JAVA_HOME=/home/bigdata/openlogic-openjdk-8u262-b10-linux-64" >> hadoop-2.7.7/etc/hadoop/hadoop-env.sh
 
 
-ENTRYPOINT [ "./hadoop-loader.sh" ]
+ENTRYPOINT [ "./spark-hadoop-loader.sh" ]
