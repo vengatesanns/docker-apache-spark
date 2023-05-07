@@ -1,7 +1,7 @@
 version: '3'
 services:
 
- # Master Node
+  # Master Node
   master-node:
     image: hackprotech/hadoop-and-spark-multinode-cluster:latest
     container_name: 'master-node'
@@ -27,9 +27,9 @@ services:
   slave-node-1:
     image: hackprotech/hadoop-and-spark-multinode-cluster:latest
     container_name: 'slave-node-1'
-    hostname:   slave-node-1
+    hostname: slave-node-1
     environment:
-      - NODE_TYPE=SLAVE  
+      - NODE_TYPE=SLAVE
       - SPARK_MASTER_URL=spark://master-node:7077
       - NODE_NUM=1
     depends_on:
@@ -37,14 +37,14 @@ services:
   slave-node-2:
     image: hackprotech/hadoop-and-spark-multinode-cluster:latest
     container_name: 'slave-node-2'
-    hostname:   slave-node-2
+    hostname: slave-node-2
     environment:
       - NODE_TYPE=SLAVE
       - SPARK_MASTER_URL=spark://master-node:7077
       - NODE_NUM=2
     depends_on:
       - master-node
- 
+
 networks:
   cluster-network:
     driver: bridge
